@@ -81,9 +81,6 @@
       padding: 14px;
       font-size: 16px;
     }
-    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .success-box { padding: 20px 10px; }
-    .success-box h2 { color: #e91e63; margin-bottom: 10px; }
   </style>
 </head>
 <body>
@@ -104,8 +101,12 @@
       <h1>Болзоогоо төлөвлөцгөөе 🌹</h1>
       <p class="subtitle">Өөрийнхөө хүссэн сонголтыг хийгээрэй (Шууд над руу очно 😉)</p>
 
-      <!-- ДООРХ МӨРӨНД FORMSPREE ЛИНКЭЭ ХУУЛЖ ТАВИНА УУ -->
-      <form id="dateForm" action="https://formspree.io/f/mgakabzj" method="POST" class="form-section">
+      <!-- ДООРХ МӨРӨНД ӨӨРИЙН ИМЭЙЛ ХАЯГИЙГ БИЧНЭ ҮҮ -->
+      <form action="https://formsubmit.co/dawaadalaibayarerdene3@gmail.com" method="POST" class="form-section">
+        <input type="hidden" name="_subject" value="❤️ Болзооны урилгын хариу ирлээ!" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_template" value="table" />
+
         <label>1. Хаана уулзах вэ?</label>
         <select name="Хаана_уулзах" required>
           <option value="Тухтай кофе шоп ☕">Тухтай кофе шоп ☕</option>
@@ -130,14 +131,8 @@
         <label>4. Надад хэлэх үг эсвэл хүсэлт байна уу?</label>
         <textarea name="Нэмэлт_хүсэлт" rows="3" placeholder="Хүссэн зүйлээ энд бичээрэй..."></textarea>
 
-        <button type="submit" class="submit-btn" id="submitBtn">Сонголтоо баталгаажуулах 💌</button>
+        <button type="submit" class="submit-btn">Сонголтоо баталгаажуулах 💌</button>
       </form>
-    </div>
-
-    <!-- 3-р хэсэг: Амжилттай илгээгдсэн -->
-    <div id="success-screen" class="hidden success-box">
-      <h2>Баярлалаа хайрт минь! ❤️</h2>
-      <p>Чиний сонголтууд над руу амжилттай илгээгдлээ. Удахгүй уулзъя! 🥰</p>
     </div>
   </div>
 
@@ -153,36 +148,6 @@
       document.getElementById('invite-screen').classList.add('hidden');
       document.getElementById('form-screen').classList.remove('hidden');
     }
-
-    const form = document.getElementById('dateForm');
-    const submitBtn = document.getElementById('submitBtn');
-
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Илгээж байна... ⏳";
-
-      const data = new FormData(form);
-      try {
-        const response = await fetch(form.action, {
-          method: form.method,
-          body: data,
-          headers: { 'Accept': 'application/json' }
-        });
-        if (response.ok) {
-          document.getElementById('form-screen').classList.add('hidden');
-          document.getElementById('success-screen').classList.remove('hidden');
-        } else {
-          alert("Алдаа гарлаа. Formspree линкээ зөв хуулсан эсэхээ шалгана уу!");
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Сонголтоо баталгаажуулах 💌";
-        }
-      } catch (error) {
-        alert("Интернэт холболтоо шалгаад дахин оролдоно уу.");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Сонголтоо баталгаажуулах 💌";
-      }
-    });
   </script>
 </body>
 </html>
