@@ -14,6 +14,7 @@
       align-items: center;
       background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
       padding: 20px;
+      overflow-x: hidden;
     }
     .card {
       background: rgba(255, 255, 255, 0.95);
@@ -24,15 +25,16 @@
       width: 100%;
       text-align: center;
     }
-    h1 { color: #e91e63; font-size: 26px; margin-bottom: 10px; }
-    p.subtitle { color: #555; font-size: 15px; margin-bottom: 24px; }
+    h1 { color: #e91e63; font-size: 26px; margin-bottom: 10px; transition: all 0.2s; }
+    p.subtitle { color: #555; font-size: 15px; margin-bottom: 24px; min-height: 22px; }
     .btn-group {
       display: flex;
       justify-content: center;
       gap: 16px;
       position: relative;
-      height: 55px;
+      min-height: 60px;
       align-items: center;
+      flex-wrap: wrap;
     }
     button {
       padding: 12px 26px;
@@ -41,18 +43,20 @@
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, font-size 0.2s, padding 0.2s;
     }
     .btn-yes {
       background: #ff4081;
       color: white;
       box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4);
+      z-index: 2;
     }
     .btn-yes:hover { transform: scale(1.06); }
     .btn-no {
       background: #e0e0e0;
       color: #555;
       position: relative;
+      z-index: 1;
     }
     .hidden { display: none; }
     .form-section { text-align: left; margin-top: 10px; }
@@ -88,10 +92,10 @@
   <div class="card">
     <!-- 1-р хэсэг: Урилга -->
     <div id="invite-screen">
-      <h1>Надтай болзоонд явах уу? 💖</h1>
-      <p class="subtitle">Чамтай хамт гоё дурсамж бүтээмээр байна ✨</p>
+      <h1 id="mainTitle">Надтай болзоонд явах уу? 💖</h1>
+      <p class="subtitle" id="subTitle">Чамтай хамт гоё дурсамж бүтээмээр байна ✨</p>
       <div class="btn-group">
-        <button class="btn-yes" onclick="showForm()">Тэгье, дуртайяа! 🥰</button>
+        <button class="btn-yes" id="yesBtn" onclick="showForm()">Тэгье, дуртайяа! 🥰</button>
         <button class="btn-no" id="noBtn" onmouseover="moveNo()" onclick="moveNo()">Үгүй 😢</button>
       </div>
     </div>
@@ -137,11 +141,50 @@
   </div>
 
   <script>
+    let noCount = 0;
+
+    const noMessages = [
+      "Итгэлтэй байна уу? 🥺",
+      "Дахиад нэг бодоод үз дээ 🙏",
+      "Арай ч үгүй байлгүй дээ 😭",
+      "Гоё болзоо болно оо ✨",
+      "Тэгье гээд дарчих л даа 🥹",
+      "Би чамайг гомдоохгүй ээ 💖",
+      "Сүүлийн боломж шүү! 😂",
+      "За за, өөр сонголт байхгүй дээ 🥰"
+    ];
+
+    const subMessages = [
+      "Нээрээ татгалзах гэж үү? 💔",
+      "Амттай хоол авч өгнө шүү 🍝",
+      "Хамгийн гоё цагийг хамт өнгөрүүлье 🌹",
+      "Үгүй гэдэг товч эвдэрчихсэн юм шиг байна 😆",
+      "Улаан товч нь илүү гоё харагдахгүй байна уу? 👉👈"
+    ];
+
     function moveNo() {
-      const btn = document.getElementById('noBtn');
+      const noBtn = document.getElementById('noBtn');
+      const yesBtn = document.getElementById('yesBtn');
+      const subTitle = document.getElementById('subTitle');
+
+      // Товчны үгийг солих
+      noBtn.textContent = noMessages[noCount % noMessages.length];
+      
+      // Дээд талын тайлбар үгийг солих
+      subTitle.textContent = subMessages[noCount % subMessages.length];
+
+      // "Үгүй" товчийг зугтаалгах
       const x = Math.random() * 180 - 90;
       const y = Math.random() * 140 - 70;
-      btn.style.transform = `translate(${x}px, ${y}px)`;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+      // "Тэгье" товчийг аажмаар томруулах
+      noCount++;
+      const newFontSize = Math.min(16 + noCount * 2, 28);
+      const newPadY = Math.min(12 + noCount * 1.5, 22);
+      const newPadX = Math.min(26 + noCount * 3, 44);
+      yesBtn.style.fontSize = `${newFontSize}px`;
+      yesBtn.style.padding = `${newPadY}px ${newPadX}px`;
     }
 
     function showForm() {
