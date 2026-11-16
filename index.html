@@ -102,9 +102,10 @@
     <!-- 2-р хэсэг: Сонголт хийх форм -->
     <div id="form-screen" class="hidden">
       <h1>Болзоогоо төлөвлөцгөөе 🌹</h1>
-      <p class="subtitle">Өөрийнхөө хүссэн сонголтыг хийгээрэй (Screenshot хийх шаардлагагүй, шууд над руу очно 😉)</p>
+      <p class="subtitle">Өөрийнхөө хүссэн сонголтыг хийгээрэй (Шууд над руу очно 😉)</p>
 
-      <form id="dateForm" class="form-section">
+      <!-- ДООРХ МӨРӨНД FORMSPREE ЛИНКЭЭ ХУУЛЖ ТАВИНА УУ -->
+      <form id="dateForm" action="https://formspree.io/f/mgakabzj" method="POST" class="form-section">
         <label>1. Хаана уулзах вэ?</label>
         <select name="Хаана_уулзах" required>
           <option value="Тухтай кофе шоп ☕">Тухтай кофе шоп ☕</option>
@@ -141,9 +142,6 @@
   </div>
 
   <script>
-    // ЭНД ӨӨРИЙН ИМЭЙЛ ХАЯГИЙГ БИЧНЭ ҮҮ:
-    const MY_EMAIL = "fragboy0302@icloud.com";
-
     function moveNo() {
       const btn = document.getElementById('noBtn');
       const x = Math.random() * 180 - 90;
@@ -164,26 +162,18 @@
       submitBtn.disabled = true;
       submitBtn.textContent = "Илгээж байна... ⏳";
 
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData);
-      data._subject = "❤️ Болзооны урилгын хариу ирлээ!";
-      data._captcha = "false";
-
+      const data = new FormData(form);
       try {
-        const response = await fetch(`https://formsubmit.co/ajax/${MY_EMAIL}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(data)
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: data,
+          headers: { 'Accept': 'application/json' }
         });
-        const result = await response.json();
-        if (result.success === "true" || result.success === true) {
+        if (response.ok) {
           document.getElementById('form-screen').classList.add('hidden');
           document.getElementById('success-screen').classList.remove('hidden');
         } else {
-          alert("Алдаа гарлаа. Имэйл хаягаа зөв бичсэн эсэхийг шалгана уу!");
+          alert("Алдаа гарлаа. Formspree линкээ зөв хуулсан эсэхээ шалгана уу!");
           submitBtn.disabled = false;
           submitBtn.textContent = "Сонголтоо баталгаажуулах 💌";
         }
